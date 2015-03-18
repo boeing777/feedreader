@@ -6,17 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.it.deveyes.feedreader.FeedParser;
-
+import com.it.deveyes.feedreader.FeedReader;
+import com.it.deveyes.feedreader.models.Channel;
+import com.it.deveyes.feedreader.models.Item;
 
 import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.ParseException;
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -25,7 +24,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new DownloadFeedTask().execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=1");
+        //new DownloadFeedTask().execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=1");
+        new DownloadFeedTask().execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=227");
 
     }
 
@@ -61,8 +61,17 @@ public class MainActivity extends ActionBarActivity {
             // params comes from the execute() call: params[0] is the url.
             try {
 
-                FeedParser feedParser = new FeedParser();
-                feedParser.parse(downloadUrl(urls[0]));
+                FeedReader feedReader = new FeedReader();
+                List<Channel> channels = feedReader.parse(downloadUrl(urls[0]));
+
+                for(Channel channel: channels){
+                        List<Item> items =channel.getItems();
+                        Log.i(MainActivity.class.getName(),"size:"+items.size());
+
+                        for(Item item : items){
+                            Log.i(MainActivity.class.getName(),item.toString());
+                        }
+                }
 
                 return "" ;
             } catch (IOException e) {
@@ -71,9 +80,6 @@ public class MainActivity extends ActionBarActivity {
                 e.printStackTrace();
                 return "Unable to retrieve feed. XmlPullParserException";
 
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return "Unable to retrieve feed .ParseException";
             }
         }
         // onPostExecute displays the results of the AsyncTask.
