@@ -10,19 +10,6 @@ public class RSS {
         this.version = version;
     }
 
-    public Channel getC() {
-        return c;
-    }
 
-    public void setC(Channel c) {
-        this.c = c;
-    }
 
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
 }
