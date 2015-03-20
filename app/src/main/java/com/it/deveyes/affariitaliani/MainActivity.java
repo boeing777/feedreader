@@ -1,11 +1,15 @@
 package com.it.deveyes.affariitaliani;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.it.deveyes.feedreader.FeedContract;
 import com.it.deveyes.feedreader.FeedReader;
 import com.it.deveyes.feedreader.models.Channel;
 import com.it.deveyes.feedreader.models.Item;
@@ -63,12 +67,30 @@ public class MainActivity extends ActionBarActivity {
 
                 FeedReader feedReader = new FeedReader();
                 List<Channel> channels = feedReader.parse(downloadUrl(urls[0]));
+                ContentResolver cr = getContentResolver();
+
 
                 for(Channel channel: channels){
+
+                    ContentValues channelValue = new ContentValues();
+                    channelValue.put(FeedContract.Channel.TITLE,channel.getTitle());
+
+                        cr.insert(FeedContract.Channel.CONTENT_URI,channelValue);
+
                         List<Item> items =channel.getItems();
                         Log.i(MainActivity.class.getName(),"size:"+items.size());
 
                         for(Item item : items){
+
+                            ContentValues itemValue = new ContentValues();
+                            itemValue.put(FeedContract.Item.TITLE,item.getTitle());
+                            itemValue.put(FeedContract.Item.CHANNEL_ID,227);
+                            itemValue.put(FeedContract.Item.DESCRIPTION,item.getDescription());
+                            itemValue.put(FeedContract.Item.LINK,item.getLink());
+                            itemValue.put(FeedContract.Item.PUB_DATE,item.getDate());
+                            itemValue.put(FeedContract.Item.ENCLOSURE,item.getEnclosure());
+                            cr.insert(FeedContract.Item.CONTENT_URI,itemValue);
+
                             Log.i(MainActivity.class.getName(),item.toString());
                         }
                 }

@@ -18,6 +18,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="com.it.deveyes.affari"
+            android:name="com.it.deveyes.feedreader.FeedProvider" >
+        </provider>
+
+
     </application>
 
 </manifest>

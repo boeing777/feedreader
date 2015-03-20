@@ -7,6 +7,7 @@ import android.provider.BaseColumns;
 
 public class FeedContract {
 
+    private static final String PATH_CHANNELS = "channels";
     private static final String PATH_ITEMS = "items";
 
 
@@ -21,6 +22,16 @@ public class FeedContract {
         public static final String LINK = "link";
         public static final String DESCRIPTION = "description";
         public static final String LANGUAGE = "lanaguage";
+
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.it.deveyes.affari.channels";
+
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.it.deveyes.affari.channel";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CHANNELS).build();
     }
 
 

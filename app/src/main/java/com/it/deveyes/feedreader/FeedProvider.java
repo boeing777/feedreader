@@ -52,6 +52,8 @@ public class FeedProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] strings, String s, String[] strings2, String s2) {
+        final SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+        assert db != null;
         return null;
     }
 
@@ -59,6 +61,10 @@ public class FeedProvider extends ContentProvider {
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
+
+            case CHANNEL:
+                return FeedContract.Channel.CONTENT_TYPE;
+
             case CHANNEL_ITEMS:
                 return FeedContract.Item.CONTENT_TYPE;
 
@@ -76,11 +82,14 @@ public class FeedProvider extends ContentProvider {
         Uri result;
 
         switch (match) {
-            case CHANNEL_ITEMS:
-                long id = db.insertOrThrow(FeedDatabase.Tables.CHANNEL, null, contentValues);
-                result = Uri.parse(FeedContract.Item.CONTENT_URI + "/" + id);
+            case CHANNEL:
+                long idChannel = db.insertOrThrow(FeedDatabase.Tables.CHANNEL, null, contentValues);
+                result = Uri.parse(FeedContract.Channel.CONTENT_URI + "/" + idChannel);
                 break;
-
+            case CHANNEL_ITEMS:
+                long idChannelItem = db.insertOrThrow(FeedDatabase.Tables.CHANNEL_ITEM, null, contentValues);
+                result = Uri.parse(FeedContract.Item.CONTENT_URI + "/" + idChannelItem);
+                break;
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
