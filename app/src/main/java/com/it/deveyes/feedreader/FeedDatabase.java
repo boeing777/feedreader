@@ -14,6 +14,7 @@ public class FeedDatabase  extends SQLiteOpenHelper{
          static final String CHANNEL = "channel";
          static final String CHANNEL_IMAGE = "channel_image";
          static final String CHANNEL_ITEM = "channel_item";
+
     }
 
     private static final String SQL_CREATE_TABLE_CHANNEL = "CREATE TABLE " + Tables.CHANNEL +

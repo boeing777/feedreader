@@ -2,6 +2,8 @@ package com.it.deveyes.affariitaliani;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.it.deveyes.feedreader.FeedContract;
+import com.it.deveyes.feedreader.FeedProvider;
 import com.it.deveyes.feedreader.FeedReader;
 import com.it.deveyes.feedreader.models.Channel;
 import com.it.deveyes.feedreader.models.Item;
@@ -23,13 +26,33 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
 
+    private final static String TAG = MainActivity.class.getName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //new DownloadFeedTask().execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=1");
-        new DownloadFeedTask().execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=227");
+       ///  new DownloadFeedTask(1).execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=1");
+        // new DownloadFeedTask(227).execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=227");
+
+        Uri uri =  Uri.parse(FeedContract.Channel.CONTENT_URI+"/"+227+"/items");
+
+        ContentResolver cr = getContentResolver();
+        Cursor cur = cr.query(uri,
+                null, null, null, null);
+
+        if (cur.getCount() > 0) {
+            Log.i(TAG, "Showing values.....");
+            while (cur.moveToNext()) {
+                String Id = cur.getString(cur.getColumnIndex(FeedContract.Item._ID));
+                String title = cur.getString(cur
+                        .getColumnIndex(FeedContract.Item.TITLE));
+                Log.d(TAG,"Id = " + Id + ", Note Title : " + title);
+            }
+        } else {
+            Log.i(TAG, "No Notes added");
+        }
 
     }
 
@@ -59,6 +82,13 @@ public class MainActivity extends ActionBarActivity {
 
 
     private class DownloadFeedTask extends AsyncTask<String, Void, String> {
+
+        int channelId;
+
+        DownloadFeedTask(int channelId){
+            this.channelId = channelId;
+        }
+
         @Override
         protected String doInBackground(String... urls) {
 
@@ -84,12 +114,12 @@ public class MainActivity extends ActionBarActivity {
 
                             ContentValues itemValue = new ContentValues();
                             itemValue.put(FeedContract.Item.TITLE,item.getTitle());
-                            itemValue.put(FeedContract.Item.CHANNEL_ID,227);
+                            itemValue.put(FeedContract.Item.CHANNEL_ID,channelId);
                             itemValue.put(FeedContract.Item.DESCRIPTION,item.getDescription());
                             itemValue.put(FeedContract.Item.LINK,item.getLink());
                             itemValue.put(FeedContract.Item.PUB_DATE,item.getDate());
                             itemValue.put(FeedContract.Item.ENCLOSURE,item.getEnclosure());
-                            cr.insert(FeedContract.Item.CONTENT_URI,itemValue);
+                            cr.insert(FeedContract.Item.CONTENT_URI, itemValue);
 
                             Log.i(MainActivity.class.getName(),item.toString());
                         }
