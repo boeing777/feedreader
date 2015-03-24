@@ -2,6 +2,7 @@ package com.it.deveyes.affariitaliani;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 
 import com.it.deveyes.feedreader.FeedContract;
 import com.it.deveyes.feedreader.FeedProvider;
+import com.it.deveyes.feedreader.FeedPullService;
 import com.it.deveyes.feedreader.FeedReader;
 import com.it.deveyes.feedreader.models.Channel;
 import com.it.deveyes.feedreader.models.Item;
@@ -36,7 +38,13 @@ public class MainActivity extends ActionBarActivity {
        ///  new DownloadFeedTask(1).execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=1");
         // new DownloadFeedTask(227).execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=227");
 
-        Uri uri =  Uri.parse(FeedContract.Channel.CONTENT_URI+"/"+227+"/items");
+        Intent msgIntent = new Intent(this, FeedPullService.class);
+        msgIntent.setAction(FeedPullService.ACTION_DOWNLOAD_FEED);
+        msgIntent.putExtra(FeedPullService., strInputMsg);
+        startService(msgIntent);
+
+
+       /* Uri uri =  Uri.parse(FeedContract.Channel.CONTENT_URI+"/"+227+"/items");
 
         ContentResolver cr = getContentResolver();
         Cursor cur = cr.query(uri,
@@ -52,7 +60,7 @@ public class MainActivity extends ActionBarActivity {
             }
         } else {
             Log.i(TAG, "No Notes added");
-        }
+        }*/
 
     }
 

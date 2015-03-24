@@ -27,7 +27,12 @@ public class FeedReader {
 
 		parser.require(XmlPullParser.START_TAG, null, "rss");
 		while (parser.next() != XmlPullParser.END_TAG) {
-			if (parser.getEventType() != XmlPullParser.START_TAG) {
+
+            if (Thread.currentThread().isInterrupted()) {
+                throw new XmlPullParserException("Cancelled");
+            }
+
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
 			}
 			String name = parser.getName();
