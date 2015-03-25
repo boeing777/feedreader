@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.it.deveyes.feedreader.FeedContract;
 import com.it.deveyes.feedreader.FeedProvider;
@@ -35,16 +38,18 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
        ///  new DownloadFeedTask(1).execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=1");
         // new DownloadFeedTask(227).execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=227");
-
+  /*
         Intent msgIntent = new Intent(this, FeedPullService.class);
         msgIntent.setAction(FeedPullService.ACTION_DOWNLOAD_FEED);
-        msgIntent.putExtra(FeedPullService., strInputMsg);
+        msgIntent.putExtra(FeedPullService.URL, "http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=227");
+        msgIntent.putExtra(FeedPullService.CHANNEL_ID, "227");
         startService(msgIntent);
 
 
-       /* Uri uri =  Uri.parse(FeedContract.Channel.CONTENT_URI+"/"+227+"/items");
+      Uri uri =  Uri.parse(FeedContract.Channel.CONTENT_URI+"/"+227+"/items");
 
         ContentResolver cr = getContentResolver();
         Cursor cur = cr.query(uri,

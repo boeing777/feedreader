@@ -35,6 +35,30 @@ public class FeedProvider extends ContentProvider {
     public static final int CHANNEL_ITEMS = 5;
     public static final int SINGLE_ITEM = 6;
 
+    public int clearTable(String table){
+        final SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+        return db.delete(table, "1",null);
+    }
+
+
+    public boolean isEmpty(String table){
+        final SQLiteDatabase db = mDatabaseHelper.getReadableDatabase();
+        boolean isEmpty=false;
+        Cursor cur = db.rawQuery("SELECT COUNT(*) FROM "+table, null);
+        if (cur != null){
+            cur.moveToFirst();
+            if (cur.getInt(0) == 0) {
+                isEmpty=true;
+            }
+
+        }
+        if(cur!=null && !cur.isClosed()){
+            cur.close();
+        }
+        return isEmpty;
+    }
+
+
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = FeedContract.CONTENT_AUTHORITY;
@@ -135,4 +159,7 @@ public class FeedProvider extends ContentProvider {
     public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
         return 0;
     }
+
+
+
 }
