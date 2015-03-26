@@ -3,7 +3,6 @@ package deveyes.it.com.customviews;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,8 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 
@@ -65,35 +62,18 @@ public class MainActivity extends ActionBarActivity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
             LinearLayout rootViewContainer = (LinearLayout) rootView.findViewById(R.id.rootViewContainer);
-
+            rootViewContainer.removeAllViews();
 
             FragmentManager fragMan = getFragmentManager();
             FragmentTransaction fragTransaction;
 
-         /*   FrameLayout frameLayout = new FrameLayout(getActivity());
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, 200, 0);
-            frameLayout.setLayoutParams(layoutParams);
-            frameLayout.setTag("fragment2");
-            frameLayout.setId(R.id.home_article_list_container);
-
-
-
-            FragmentTransaction fragTransaction1=fragMan.beginTransaction();
-            fragTransaction1.add(frameLayout.getId(), ArticleListFragment.newInstance("Fragment","Two") , "fragment4");
-            fragTransaction1.commit();*/
-
 
             fragTransaction = fragMan.beginTransaction();
-            fragTransaction.add(rootViewContainer.getId(), OneFragment.newInstance("Fragment","One") , "fragment1");
-            fragTransaction.add(rootViewContainer.getId(), TwoFragment.newInstance("Fragment","One") , "fragment2");
-            fragTransaction.add(rootViewContainer.getId(), ThreeFragment.newInstance("Fragment","Three") , "fragment3");
-
+            fragTransaction.add(rootViewContainer.getId(), HomePrimeArticleFragment.newInstance("Fragment", "One") , "fragment1");
+            fragTransaction.add(rootViewContainer.getId(), HomeTrendingArticleFragment.newInstance("Fragment", "One") , "fragment2");
+            fragTransaction.add(rootViewContainer.getId(), HomeVideoFragment.newInstance("Fragment", "Three") , "fragment3");
+            fragTransaction.add(rootViewContainer.getId(), HomePhotoFragment.newInstance("Fragment", "Four") , "fragment4");
             fragTransaction.commit();
-
-
-            //rootViewContainer.addView(frameLayout);
-
 
 
             return rootView;

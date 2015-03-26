@@ -1,11 +1,28 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="deveyes.it.com.customviews.ThreeFragment">
+    android:layout_height="wrap_content" tools:context="deveyes.it.com.customviews.HomeVideoFragment">
 
  <LinearLayout
      android:layout_width="match_parent"
      android:layout_height="100dp"
-     android:background="@color/green">
+     android:background="@color/gold">
+
+     <mobi.parchment.widget.adapterview.listview.ListView
+         xmlns:parchment="http://schemas.android.com/apk/res/deveyes.it.com.customviews"
+         android:id="@+id/horizontal_list_view"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:scrollbars="horizontal"
+         android:scrollbarAlwaysDrawHorizontalTrack="true"
+         android:scrollbarAlwaysDrawVerticalTrack="false"
+         android:clipToPadding="false"
+         parchment:isViewPager="true"
+         parchment:orientation="horizontal"
+         parchment:cellSpacing="15dp"
+         parchment:isCircularScroll="false"
+         parchment:snapPosition="start"
+         parchment:snapToPosition="false" />
+
 
      </LinearLayout>
 

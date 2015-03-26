@@ -6,17 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TwoFragment#newInstance} factory method to
+ * Use the {@link HomePrimeArticleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TwoFragment extends Fragment {
+public class HomePrimeArticleFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -33,11 +30,11 @@ public class TwoFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TwoFragment.
+     * @return A new instance of fragment HomePrimeArticleFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TwoFragment newInstance(String param1, String param2) {
-        TwoFragment fragment = new TwoFragment();
+    public static HomePrimeArticleFragment newInstance(String param1, String param2) {
+        HomePrimeArticleFragment fragment = new HomePrimeArticleFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -45,7 +42,7 @@ public class TwoFragment extends Fragment {
         return fragment;
     }
 
-    public TwoFragment() {
+    public HomePrimeArticleFragment() {
         // Required empty public constructor
     }
 
@@ -58,32 +55,11 @@ public class TwoFragment extends Fragment {
         }
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.fragment_two, container, false);
-
-        // Defined Array values to show in ListView
-        String[] values = new String[] { "Android List View",
-                "Adapter implementation",
-                "Simple List View In Android"
-        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.article_list_item_view, R.id.textView, values);
-
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 200, 0);
-
-        for(int i=0;i<adapter.getCount();i++) {
-            View v = adapter.getView(i, null, null);
-            v.setLayoutParams(layoutParams);
-            view.addView(v);
-        }
-        return view;
+        return inflater.inflate(R.layout.fragment_one, container, false);
     }
 
 
