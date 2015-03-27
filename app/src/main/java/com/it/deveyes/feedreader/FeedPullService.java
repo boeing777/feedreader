@@ -4,8 +4,6 @@ import android.app.IntentService;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 
 import com.it.deveyes.feedreader.models.Channel;
@@ -31,7 +29,7 @@ public class FeedPullService extends IntentService {
     public static final String URL = "com.it.deveyes.feedreader.feed.url";
     public static final String CHANNEL_ID = "com.it.deveyes.feedreader.feed.url.channelId";
 
-    private  String channelId;
+    private  int channelId;
 
     public FeedPullService() {
         super("FeedPullService");
@@ -50,9 +48,9 @@ public class FeedPullService extends IntentService {
                     throw new UnsupportedOperationException(URL + "must not be null");
                 }
 
-                 channelId = intent.getStringExtra(CHANNEL_ID);
-                if(null == channelId || channelId.length()==0){
-                    throw new UnsupportedOperationException(CHANNEL_ID + "must not be null");
+                 channelId = intent.getIntExtra(CHANNEL_ID,0);
+                if(channelId ==0){
+                    throw new UnsupportedOperationException(CHANNEL_ID + "must be a valid channel id");
                 }
 
                 handleActionDownload(url);
@@ -68,7 +66,7 @@ public class FeedPullService extends IntentService {
             FeedReader feedReader = new FeedReader();
             try {
                 List<Channel> channels = feedReader.parse(inputStream);
-                saveIntoDatabase(channels);
+                saveToDatabase(channels);
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -78,10 +76,11 @@ public class FeedPullService extends IntentService {
     }
 
 
-    private void saveIntoDatabase(List<Channel> channels) {
+    private void saveToDatabase(List<Channel> channels) {
         ContentResolver cr = getContentResolver();
         for(Channel channel: channels){
             ContentValues channelValue = new ContentValues();
+            channelValue.put(FeedContract.Channel.CHANNEL_ID,channelId);
             channelValue.put(FeedContract.Channel.TITLE,channel.getTitle());
             cr.insert(FeedContract.Channel.CONTENT_URI,channelValue);
             List<Item> items =channel.getItems();
@@ -99,10 +98,10 @@ public class FeedPullService extends IntentService {
     }
 
 
-    private InputStream downloadUrl(String myurl) {
-        java.net.URL url = null;
+    private InputStream downloadUrl(String myUrl) {
+        java.net.URL url;
         try {
-            url = new URL(myurl);
+            url = new URL(myUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             if ((conn instanceof HttpURLConnection)) {

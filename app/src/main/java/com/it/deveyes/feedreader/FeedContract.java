@@ -18,6 +18,7 @@ public class FeedContract {
 
 
     public static class Channel implements BaseColumns {
+        public static final String CHANNEL_ID = "idChannel";
         public static final String TITLE = "title";
         public static final String LINK = "link";
         public static final String DESCRIPTION = "description";
@@ -35,6 +36,14 @@ public class FeedContract {
 
 
     }
+
+
+    public static class PreferredItem implements BaseColumns {
+
+        public static final String Item_ID = "idItem";
+    }
+
+
 
 
 

@@ -10,16 +10,18 @@ public class FeedDatabase  extends SQLiteOpenHelper{
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "affari_italiani.db";
 
-    interface Tables {
+    public interface Tables {
          static final String CHANNEL = "channel";
          static final String CHANNEL_IMAGE = "channel_image";
          static final String CHANNEL_ITEM = "channel_item";
+         static final String PREFERRED_ITEM = "preferred_item";
 
     }
 
     private static final String SQL_CREATE_TABLE_CHANNEL = "CREATE TABLE " + Tables.CHANNEL +
             "(" +
             FeedContract.Channel._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+            FeedContract.Channel.CHANNEL_ID + " INTEGER," +
             FeedContract.Channel.TITLE + " TEXT," +
             FeedContract.Channel.DESCRIPTION + " TEXT," +
             FeedContract.Channel.LINK + " TEXT," +
@@ -60,6 +62,19 @@ public class FeedDatabase  extends SQLiteOpenHelper{
 
 
 
+    private static final String SQL_CREATE_TABLE_PREFERRED_ITEM = "CREATE TABLE " + Tables.PREFERRED_ITEM +
+            "(" +
+            FeedContract.PreferredItem._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+            FeedContract.PreferredItem.Item_ID + " INTEGER," +
+            " FOREIGN KEY("+ FeedContract.PreferredItem.Item_ID +")" +
+            " REFERENCES "+Tables.CHANNEL_ITEM+"("+ FeedContract.Item._ID+")"+
+             ")";
+    private static final String SQL_DROP_TABLE_PREFERRED_ITEM = "DROP TABLE IF EXISTS " + Tables.PREFERRED_ITEM;
+
+
+
+
+
     public FeedDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -69,6 +84,7 @@ public class FeedDatabase  extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL(SQL_CREATE_TABLE_CHANNEL);
         sqLiteDatabase.execSQL(SQL_CREATE_TABLE_CHANNEL_IMAGE);
         sqLiteDatabase.execSQL(SQL_CREATE_TABLE_CHANNEL_ITEM);
+        sqLiteDatabase.execSQL(SQL_CREATE_TABLE_PREFERRED_ITEM);
 
     }
 

@@ -7,18 +7,27 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.it.deveyes.affariitaliani.home.HomeTrendingArticleFragment;
+import com.it.deveyes.feedreader.ChannelIds;
+import com.it.deveyes.feedreader.DatabaseHelper;
 import com.it.deveyes.feedreader.FeedContract;
+import com.it.deveyes.feedreader.FeedDatabase;
 import com.it.deveyes.feedreader.FeedProvider;
 import com.it.deveyes.feedreader.FeedPullService;
 import com.it.deveyes.feedreader.FeedReader;
+import com.it.deveyes.feedreader.FeedUrls;
 import com.it.deveyes.feedreader.models.Channel;
 import com.it.deveyes.feedreader.models.Item;
 
@@ -38,6 +47,23 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //clear database
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+
+        //delete where channelid matches
+        String whereClause = FeedContract.Channel.CHANNEL_ID + "=?";
+        String[] whereArgs = new String[] { String.valueOf(1) };
+        databaseHelper.delete(FeedDatabase.Tables.CHANNEL_ITEM,whereClause,whereArgs);
+        databaseHelper.delete(FeedDatabase.Tables.CHANNEL,whereClause,whereArgs);
+        //delete where channelid matches
+
+       // select _id,idChannel,link from channel_item where idChannel=1;
+
+        Intent msgIntent = new Intent(this, FeedPullService.class);
+        msgIntent.setAction(FeedPullService.ACTION_DOWNLOAD_FEED);
+        msgIntent.putExtra(FeedPullService.URL, FeedUrls.HOME_LIMITED);
+        msgIntent.putExtra(FeedPullService.CHANNEL_ID, ChannelIds.HOME);
+        startService(msgIntent);
 
        ///  new DownloadFeedTask(1).execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=1");
         // new DownloadFeedTask(227).execute("http://www.affaritaliani.it/static/rss/rssAPP2.aspx?idchannel=227");
@@ -70,6 +96,35 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+    public static class PlaceholderFragment extends Fragment {
+
+
+        public PlaceholderFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            LinearLayout rootViewContainer = (LinearLayout) rootView.findViewById(R.id.rootViewContainer);
+            rootViewContainer.removeAllViews();
+
+            FragmentManager fragMan = getFragmentManager();
+            FragmentTransaction fragTransaction;
+
+
+            fragTransaction = fragMan.beginTransaction();
+            fragTransaction.add(rootViewContainer.getId(), HomeTrendingArticleFragment.newInstance() , "fragment2");
+            fragTransaction.commit();
+
+
+            return rootView;
+        }
+    }
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -91,6 +146,8 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
 
